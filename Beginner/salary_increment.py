@@ -1,0 +1,17 @@
+emp_id = int(input("Enter Employee ID: "))
+emp_name = input("Enter name: ")
+age = int(input("Enter Employee age: "))
+emp_department = input("Enter Department: ")
+emp_salary = float(input("Enter Salary: "))
+
+increment = 10 * (emp_salary/100)
+new_salary = emp_salary + increment
+
+print("\n\n_Employee Details_")
+print("------------------\n")
+print(f"Employee ID = {emp_id}")
+print(f"Employee Name = {emp_name}")
+print(f"Employee Age = {age}")
+print(f"Employee Department = {emp_department}")
+print(f"Employee Old Salary = ₹{emp_salary:.2f}")
+print(f"Employee New Salary = ₹{new_salary:.2f}")
