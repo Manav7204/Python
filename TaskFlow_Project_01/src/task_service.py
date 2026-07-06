@@ -1,10 +1,12 @@
 def add_task(task_list):
     task_title = input("Enter the Title of the task.\n>").strip()
     if task_title:
-        task_list.append(task_title)
-        print("\nTask added successfully.\n")
+        with open("data/task.json", "a") as file :
+            file.write(task_list)
     else:
         print("\nTask cannot be empty!\n")
+
+    print("Task added Successfully\n")
 
 def view_task(task_list):
     if task_list:
