@@ -1,6 +1,7 @@
 import src.menu, src.task_service
+from src.storage import store_data, read_data
 
-task_list = [] 
+task_list = read_data()
 
 while True:
 
@@ -15,16 +16,8 @@ while True:
         src.task_service.view_task(task_list)
 
     elif choice == 3:
-        try:
-            task_id = int(input("Enter the task id to be deleted: "))
-        except ValueError:
-            print("\nEnter a valid Integer.\n")
-            continue
-
-        if 1 <= task_id <= len(task_list):
-            src.task_service.delete_task(task_list, task_id)
-        else:
-            print("\nInvalid task id.\n")
+        src.task_service.delete_task(task_list)
+       
 
     elif choice == 4:
         print("Goodbye!")
