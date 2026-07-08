@@ -17,8 +17,8 @@ def add_task(task_list):
 
 def view_task(task_list):
     if task_list:
-        for i in range(len(task_list)):
-            print(f"{i['id']}\n{i['title']}")
+        for i in task_list:
+            print(f"{i['id']}. {i['title']}")
     else:
         print("\nNo Tasks Available.")
 
@@ -32,6 +32,8 @@ def delete_task(task_list):
         
         if 1 <= task_id <= len(task_list):
             task_list.pop(task_id-1)
+            for i in range(len(task_list)):
+                task_list[i]["id"] = i+1
             store_data(task_list)
             print("\nTask Deleted successfully.")
         else:

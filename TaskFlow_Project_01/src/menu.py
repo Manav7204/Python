@@ -1,6 +1,7 @@
 def show_menu():
     print("="*5, "TaskFlow", "="*5)
-    print("1. Add Task\n2.View Tasks\n3.Delete\n4.Exit")
+    print("1. Add Task\n2.View Tasks\n3.Delete\n4.Exit\n")
+    print("="*20)
 
 def get_menu_choice():
     try:
