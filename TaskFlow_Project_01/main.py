@@ -16,10 +16,12 @@ while True:
         src.task_service.view_task(task_list)
 
     elif choice == 3:
-        src.task_service.delete_task(task_list)
-       
-
+        src.task_service.update_task(task_list)
+        
     elif choice == 4:
+        src.task_service.delete_task(task_list)
+
+    elif choice == 5:
         print("Goodbye!")
         break
     else:
