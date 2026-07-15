@@ -17,14 +17,15 @@ def add_task(task_list):
         print("\nTask cannot be empty!\n")
 
 
-
 def view_task(task_list):
     if task_list:
+        print("\n\n")
+        print("-"*10, "Task List", "-"*10)
         for i in task_list:
             print(f"{i['id']}. {i['title']}")
+        print("\n\n")
     else:
         print("\nNo Tasks Available.")
-
 
 
 def update_task(task_list):

@@ -16,3 +16,31 @@ def read_data():
         return []
     
     return task_list
+
+def search_task(task_list):
+    
+    if task_list:
+        keyword = input("Enter the search word: ").strip().lower()
+
+        if not keyword:
+            print("Keyword cannot be empty.")
+            return
+        
+        match_list = []
+
+        for task in task_list:
+            task["title"]
+
+            if keyword in  (task["title"]).lower():
+                match_list.append(task)
+
+        if match_list:        
+            print(f"Found {len(match_list)} matches -->")
+            
+            for task in match_list:
+                print(f"{task['id']}. {task['title']}")
+        else:
+            print("No match found !")
+
+    else:
+        print("Nothing to Search!")
