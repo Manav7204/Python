@@ -1,7 +1,9 @@
 import src.menu, src.task_service
-from src.storage import store_data, read_data, search_task
+from src.storage import read_data, search_task
+from src.database import insert_task,create_table
 
 task_list = read_data()
+create_table()
 
 while True:
 
@@ -10,7 +12,7 @@ while True:
     choice = src.menu.get_menu_choice()
 
     if choice == 1:
-        src.task_service.add_task(task_list)
+        insert_task()
 
     elif choice == 2:
         src.task_service.view_task(task_list)

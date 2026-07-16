@@ -7,7 +7,7 @@ def create_connection():
     return conn, cursor
 
 def create_table():
-    conn ,cursor = create_connection()
+    conn, cursor = create_connection()
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS tasks (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -17,3 +17,21 @@ def create_table():
 
     conn.commit()
     conn.close()
+
+def insert_task():
+    conn, cursor = create_connection()
+
+    task_title = input("Enter the Title of the task.\n>").strip()
+
+    if task_title:
+        cursor.execute(
+        "Insert INTO tasks (title) VALUES (?)",
+        (task_title,)               
+        )
+        conn.commit()
+        conn.close()
+        print("Task added Successfully\n")
+    else:
+        conn.close()
+        print("\nTask cannot be empty!\n")
+        return None
