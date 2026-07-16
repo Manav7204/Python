@@ -18,20 +18,80 @@ def create_table():
     conn.commit()
     conn.close()
 
-def insert_task():
+def insert_task(task_title):
+    conn, cursor = create_connection()
+    
+    cursor.execute(
+    "Insert INTO tasks (title) VALUES (?)",
+    (task_title,)              
+    )
+
+    conn.commit()
+    conn.close()
+    print("Task added Successfully\n")
+
+def read_tasks():
     conn, cursor = create_connection()
 
-    task_title = input("Enter the Title of the task.\n>").strip()
+    cursor.execute(
+        """SELECT * FROM tasks;"""
+    )
+    tasks = cursor.fetchall()
 
-    if task_title:
-        cursor.execute(
-        "Insert INTO tasks (title) VALUES (?)",
-        (task_title,)               
-        )
-        conn.commit()
-        conn.close()
-        print("Task added Successfully\n")
-    else:
-        conn.close()
-        print("\nTask cannot be empty!\n")
-        return None
+    conn.close()
+    return tasks
+
+def get_task_by_id(task_id):
+    conn, cursor = create_connection()
+
+    cursor.execute(
+        "SELECT * FROM tasks WHERE id = ?",
+        (task_id,)
+    )
+
+    task = cursor.fetchone()
+
+    conn.close()
+
+    return task
+
+def alter_task(task_title, task_id):
+    conn, cursor = create_connection()
+
+    cursor.execute(
+        """UPDATE tasks
+        SET title = ?
+        WHERE id = ?""",
+        (task_title, task_id)
+    )
+    
+    conn.commit()
+    conn.close()
+
+
+def retrieve_tasks(keyword):
+    conn, cursor = create_connection()
+
+    cursor.execute(
+        """SELECT * FROM tasks
+        WHERE title LIKE ?""",
+        (f"%{keyword}%",)
+    )
+
+    tasks = cursor.fetchall()
+
+    conn.close()
+
+    return tasks
+
+def delete_task_record(task_id):
+    conn, cursor = create_connection()
+
+    cursor.execute(
+        """DELETE FROM tasks
+        WHERE id = ?""",
+        (task_id,)
+    )
+    
+    conn.commit()
+    conn.close()

@@ -1,74 +1,82 @@
-from src.storage import store_data
+from src.database import insert_task, read_tasks,alter_task, delete_task_record, retrieve_tasks, get_task_by_id
 
-
-def add_task(task_list):
+def add_task():
 
     task_title = input("Enter the Title of the task.\n>").strip()
 
-    task = {
-        "id" : len(task_list) + 1,
-        "title" : task_title
-    }
-    if task_title:
-        task_list.append(task)
-        store_data(task_list)
-        print("Task added Successfully\n")
+    if task_title:     
+        insert_task(task_title)
     else:
         print("\nTask cannot be empty!\n")
+        return None
+    
 
-
-def view_task(task_list):
-    if task_list:
+def view_tasks():
+    tasks = read_tasks()
+    if tasks:
         print("\n\n")
         print("-"*10, "Task List", "-"*10)
-        for i in task_list:
-            print(f"{i['id']}. {i['title']}")
+        for id, title in tasks:
+            print(f"{id}. {title}")
         print("\n\n")
     else:
         print("\nNo Tasks Available.")
 
 
-def update_task(task_list):
-    if task_list:      
-        try:
-            task_id = int(input("Enter the task id to update: "))
-        except ValueError:
-            print("\nEnter a valid Integer.\n")
-            return None
-
-        
-        if 1 <= task_id <= len(task_list):
-            task_title = input("Enter the Title of the task.\n>").strip()
-        else:
-            print("ID do not exist!")
-            return None
+def update_task():    
+    try:
+        task_id = int(input("Enter the task id to update: "))
+    except ValueError:
+        print("\nEnter a valid Integer.\n")
+        return None
+    
+    task =  get_task_by_id(task_id)   
+    if task:
+        task_title = input("Enter the Title of the task.\n>").strip()
 
         if task_title:
-            task_list[task_id-1]["title"] = task_title
-            store_data(task_list)
+            alter_task(task_title, task_id)
             print("Task updated Successfully\n")
         else:
             print("\nTask cannot be empty!\n")
             return None
+    
+    else:
+        print("ID do not exist!")
+        return None
+
             
 
+def search_task():
+    keyword = input("Enter the Search word: ").strip()
 
-def delete_task(task_list):
-    if task_list:      
-        try:
-            task_id = int(input("Enter the task id to be deleted: "))
-        except ValueError:
-            print("\nEnter a valid Integer.\n")
-            return None
-        
-        if 1 <= task_id <= len(task_list):
-            task_list.pop(task_id-1)
-            for i in range(len(task_list)):
-                task_list[i]["id"] = i+1
-            store_data(task_list)
-            print("\nTask Deleted successfully.")
-        else:
-            print("\nInvalid task id.\n")
-            return None     
+    if not keyword:
+        print("Keyword cannot be empty !")
+        return
+
+    found_tasks = retrieve_tasks(keyword)
+    
+    if found_tasks:        
+        print(f"Found {len(found_tasks)} matches -->")
+            
+        for id, title in found_tasks:
+            print(f"{id}. {title}")
     else:
-        print("\nNothing to Delete.")
+        print("No match found !")
+        return
+
+
+def delete_task():
+    try:
+        task_id = int(input("Enter the task id to Delete: "))
+    except ValueError:
+        print("\nEnter a valid Integer.\n")
+        return None
+    task = get_task_by_id(task_id)
+
+    if task:
+        delete_task_record(task_id)
+        print("\nTask Deleted successfully.")
+    else:
+        print("\nInvalid task id.\n")
+        return None     
