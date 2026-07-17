@@ -1,13 +1,25 @@
-from src.database import insert_task, read_tasks,alter_task, delete_task_record, retrieve_tasks, get_task_by_id
+from src.database import (
+    insert_task,
+    read_tasks,
+    alter_task,
+    delete_task_record,
+    retrieve_tasks,
+    get_task_by_id,
+)
+import logging
+
+logger = logging.getLogger(__name__)
 
 def add_task():
 
     task_title = input("Enter the Title of the task.\n>").strip()
 
     if task_title:     
-        insert_task(task_title)
+        task_id = insert_task(task_title)
+        logger.info(f"Task added at ID = {task_id}")
     else:
         print("\nTask cannot be empty!\n")
+        logger.warning("Empty Task title")
         return None
     
 
@@ -19,6 +31,7 @@ def view_tasks():
         for id, title in tasks:
             print(f"{id}. {title}")
         print("\n\n")
+        logger.info("Viewed Tasks")
     else:
         print("\nNo Tasks Available.")
 
@@ -28,6 +41,7 @@ def update_task():
         task_id = int(input("Enter the task id to update: "))
     except ValueError:
         print("\nEnter a valid Integer.\n")
+        logger.warning("Invalid Task ID entered")
         return None
     
     task =  get_task_by_id(task_id)   
@@ -37,6 +51,8 @@ def update_task():
         if task_title:
             alter_task(task_title, task_id)
             print("Task updated Successfully\n")
+            logger.info(f"Task updated Successfully: ID = {task_id}")
+
         else:
             print("\nTask cannot be empty!\n")
             return None
@@ -56,6 +72,8 @@ def search_task():
 
     found_tasks = retrieve_tasks(keyword)
     
+    logger.info(f"Search performed: {keyword}")
+
     if found_tasks:        
         print(f"Found {len(found_tasks)} matches -->")
             
@@ -77,6 +95,8 @@ def delete_task():
     if task:
         delete_task_record(task_id)
         print("\nTask Deleted successfully.")
+        logger.info(f"Task deleted at ID = {task_id}")
     else:
         print("\nInvalid task id.\n")
+        logger.warning("Invalid Task ID entered")
         return None     

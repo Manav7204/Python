@@ -1,4 +1,7 @@
 import sqlite3
+import logging
+
+logger = logging.getLogger(__name__)
 
 DATABASE_NAME = 'data/task.db'
 def create_connection():
@@ -7,16 +10,22 @@ def create_connection():
     return conn, cursor
 
 def create_table():
-    conn, cursor = create_connection()
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS tasks (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        title TEXT NOT NULL
-        )
-    """)
+    try:
+        conn, cursor = create_connection()
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS tasks (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT NOT NULL
+            )
+        """)
 
-    conn.commit()
-    conn.close()
+    except sqlite3.Error as error:
+        logger.error(f"Database error: {error}")
+    
+    finally:
+        if conn:
+            conn.commit()
+            conn.close()
 
 def insert_task(task_title):
     conn, cursor = create_connection()
@@ -26,9 +35,11 @@ def insert_task(task_title):
     (task_title,)              
     )
 
+    inserted_id = cursor.lastrowid
+
     conn.commit()
     conn.close()
-    print("Task added Successfully\n")
+    return inserted_id
 
 def read_tasks():
     conn, cursor = create_connection()
