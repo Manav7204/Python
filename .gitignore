@@ -1,1 +1,4 @@
-gitpush.py
+logs/
+data/*.db
+__pycache__/
+*.pyc
