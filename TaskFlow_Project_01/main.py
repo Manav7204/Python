@@ -1,13 +1,16 @@
 from src.menu import show_menu, get_menu_choice
 from src.task_service import add_task, view_tasks, update_task, delete_task, search_task
 from src.database import create_table
-from config import setup_logging
 import logging
+from config import setup_logging
+from src.models.task import Task
 
 from src.database import read_tasks
 
-task = read_tasks()
+task = Task(1, "Learn OOP")
+
 print(task)
+print([task])
 
 setup_logging()
 logging.debug("Application Started.")
