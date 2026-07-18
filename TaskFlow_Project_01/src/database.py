@@ -1,13 +1,17 @@
 import sqlite3
 import logging
+from src.models.task import Task
 
 logger = logging.getLogger(__name__)
 
-DATABASE_NAME = 'data/task.db'
+DATABASE_NAME = "data/task.db"
+
+
 def create_connection():
     conn = sqlite3.connect(DATABASE_NAME)
     cursor = conn.cursor()
     return conn, cursor
+
 
 def create_table():
     try:
@@ -21,19 +25,17 @@ def create_table():
 
     except sqlite3.Error as error:
         logger.error(f"Database error: {error}")
-    
+
     finally:
         if conn:
             conn.commit()
             conn.close()
 
+
 def insert_task(task_title):
     conn, cursor = create_connection()
-    
-    cursor.execute(
-    "Insert INTO tasks (title) VALUES (?)",
-    (task_title,)              
-    )
+
+    cursor.execute("Insert INTO tasks (title) VALUES (?)", (task_title,))
 
     inserted_id = cursor.lastrowid
 
@@ -41,30 +43,39 @@ def insert_task(task_title):
     conn.close()
     return inserted_id
 
+
 def read_tasks():
     conn, cursor = create_connection()
 
-    cursor.execute(
-        """SELECT * FROM tasks;"""
-    )
-    tasks = cursor.fetchall()
+    cursor.execute("""SELECT * FROM tasks;""")
+    rows = cursor.fetchall()
+
+    tasks = []
+
+    for row in rows:
+        tasks.append(Task(row[0], row[1]))
 
     conn.close()
     return tasks
 
+
 def get_task_by_id(task_id):
     conn, cursor = create_connection()
 
-    cursor.execute(
-        "SELECT * FROM tasks WHERE id = ?",
-        (task_id,)
-    )
+    cursor.execute("SELECT * FROM tasks WHERE id = ?", (task_id,))
 
-    task = cursor.fetchone()
+    row = cursor.fetchone()
+
+    if row is None:
+        conn.close()
+        return None
+
+    task = Task(row[0], row[1])
 
     conn.close()
 
     return task
+
 
 def alter_task(task_title, task_id):
     conn, cursor = create_connection()
@@ -73,9 +84,9 @@ def alter_task(task_title, task_id):
         """UPDATE tasks
         SET title = ?
         WHERE id = ?""",
-        (task_title, task_id)
+        (task_title, task_id),
     )
-    
+
     conn.commit()
     conn.close()
 
@@ -86,14 +97,20 @@ def retrieve_tasks(keyword):
     cursor.execute(
         """SELECT * FROM tasks
         WHERE title LIKE ?""",
-        (f"%{keyword}%",)
+        (f"%{keyword}%",),
     )
 
-    tasks = cursor.fetchall()
+    rows = cursor.fetchall()
+
+    tasks = []
+
+    for row in rows:
+        task = Task(row[0], row[1])
+        tasks.append(task)
 
     conn.close()
-
     return tasks
+
 
 def delete_task_record(task_id):
     conn, cursor = create_connection()
@@ -101,8 +118,8 @@ def delete_task_record(task_id):
     cursor.execute(
         """DELETE FROM tasks
         WHERE id = ?""",
-        (task_id,)
+        (task_id,),
     )
-    
+
     conn.commit()
     conn.close()

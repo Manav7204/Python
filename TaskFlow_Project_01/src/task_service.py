@@ -10,41 +10,42 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 def add_task():
 
     task_title = input("Enter the Title of the task.\n>").strip()
 
-    if task_title:     
+    if task_title:
         task_id = insert_task(task_title)
         logger.info(f"Task added at ID = {task_id}")
     else:
         print("\nTask cannot be empty!\n")
         logger.warning("Empty Task title")
         return None
-    
+
 
 def view_tasks():
     tasks = read_tasks()
     if tasks:
         print("\n\n")
-        print("-"*10, "Task List", "-"*10)
-        for id, title in tasks:
-            print(f"{id}. {title}")
+        print("-" * 10, "Task List", "-" * 10)
+        for task in tasks:
+            print(task)
         print("\n\n")
         logger.info("Viewed Tasks")
     else:
         print("\nNo Tasks Available.")
 
 
-def update_task():    
+def update_task():
     try:
         task_id = int(input("Enter the task id to update: "))
     except ValueError:
         print("\nEnter a valid Integer.\n")
         logger.warning("Invalid Task ID entered")
         return None
-    
-    task =  get_task_by_id(task_id)   
+
+    task = get_task_by_id(task_id)
     if task:
         task_title = input("Enter the Title of the task.\n>").strip()
 
@@ -56,12 +57,11 @@ def update_task():
         else:
             print("\nTask cannot be empty!\n")
             return None
-    
+
     else:
-        print("ID do not exist!")
+        print("Task not found.")
         return None
 
-            
 
 def search_task():
     keyword = input("Enter the Search word: ").strip()
@@ -71,14 +71,14 @@ def search_task():
         return
 
     found_tasks = retrieve_tasks(keyword)
-    
+
     logger.info(f"Search performed: {keyword}")
 
-    if found_tasks:        
+    if found_tasks:
         print(f"Found {len(found_tasks)} matches -->")
-            
-        for id, title in found_tasks:
-            print(f"{id}. {title}")
+
+        for task in found_tasks:
+            print(task)
     else:
         print("No match found !")
         return
@@ -90,6 +90,7 @@ def delete_task():
     except ValueError:
         print("\nEnter a valid Integer.\n")
         return None
+
     task = get_task_by_id(task_id)
 
     if task:
@@ -97,6 +98,6 @@ def delete_task():
         print("\nTask Deleted successfully.")
         logger.info(f"Task deleted at ID = {task_id}")
     else:
-        print("\nInvalid task id.\n")
-        logger.warning("Invalid Task ID entered")
-        return None     
+        print("\nNo task found.\n")
+        logger.warning("No task found.")
+        return None

@@ -4,6 +4,11 @@ from src.database import create_table
 from config import setup_logging
 import logging
 
+from src.database import read_tasks
+
+task = read_tasks()
+print(task)
+
 setup_logging()
 logging.debug("Application Started.")
 create_table()
@@ -18,14 +23,14 @@ while True:
         add_task()
 
     elif choice == 2:
-        view_tasks() 
+        view_tasks()
 
     elif choice == 3:
         search_task()
 
     elif choice == 4:
         update_task()
-        
+
     elif choice == 5:
         delete_task()
 
