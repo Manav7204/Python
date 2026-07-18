@@ -7,6 +7,7 @@ from src.database import (
     get_task_by_id,
 )
 import logging
+from src.models.task import Task
 
 logger = logging.getLogger(__name__)
 
@@ -16,7 +17,8 @@ def add_task():
     task_title = input("Enter the Title of the task.\n>").strip()
 
     if task_title:
-        task_id = insert_task(task_title)
+        task = Task(None, task_title)
+        task_id = insert_task(task)
         logger.info(f"Task added at ID = {task_id}")
     else:
         print("\nTask cannot be empty!\n")

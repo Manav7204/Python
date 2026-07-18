@@ -32,10 +32,10 @@ def create_table():
             conn.close()
 
 
-def insert_task(task_title):
+def insert_task(task):
     conn, cursor = create_connection()
 
-    cursor.execute("Insert INTO tasks (title) VALUES (?)", (task_title,))
+    cursor.execute("Insert INTO tasks (title) VALUES (?)", (task.title,))
 
     inserted_id = cursor.lastrowid
 

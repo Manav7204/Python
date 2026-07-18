@@ -3,17 +3,10 @@ from src.task_service import add_task, view_tasks, update_task, delete_task, sea
 from src.database import create_table
 import logging
 from config import setup_logging
-from src.models.task import Task
-
-from src.database import read_tasks
-
-task = Task(1, "Learn OOP")
-
-print(task)
-print([task])
 
 setup_logging()
 logging.debug("Application Started.")
+
 create_table()
 
 while True:

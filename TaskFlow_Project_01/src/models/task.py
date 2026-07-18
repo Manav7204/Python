@@ -6,7 +6,7 @@ logger = logging.getLogger(__name__)
 class Task:
     def __init__(self, id: int, title: str):
         self._id: int = id
-        self.title: str = title     # self.title in place of self._title to all setter work for validation
+        self.title: str = title  # self.title in place of self._title to all setter work for validation
 
     @property
     def id(self) -> int:
