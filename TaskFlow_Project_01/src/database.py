@@ -77,14 +77,14 @@ def get_task_by_id(task_id):
     return task
 
 
-def alter_task(task_title, task_id):
+def alter_task(task):
     conn, cursor = create_connection()
 
     cursor.execute(
         """UPDATE tasks
         SET title = ?
         WHERE id = ?""",
-        (task_title, task_id),
+        (task.title, task.id),
     )
 
     conn.commit()
@@ -112,13 +112,13 @@ def retrieve_tasks(keyword):
     return tasks
 
 
-def delete_task_record(task_id):
+def delete_task_record(task):
     conn, cursor = create_connection()
 
     cursor.execute(
         """DELETE FROM tasks
         WHERE id = ?""",
-        (task_id,),
+        (task.id,),
     )
 
     conn.commit()

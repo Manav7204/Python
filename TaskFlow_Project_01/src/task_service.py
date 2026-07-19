@@ -48,17 +48,19 @@ def update_task():
         return None
 
     task = get_task_by_id(task_id)
+    
     if task:
-        task_title = input("Enter the Title of the task.\n>").strip()
-
-        if task_title:
-            alter_task(task_title, task_id)
-            print("Task updated Successfully\n")
-            logger.info(f"Task updated Successfully: ID = {task_id}")
-
-        else:
-            print("\nTask cannot be empty!\n")
-            return None
+        new_title = input("Enter the Title of the task.\n>").strip()
+        task.title = new_title
+        
+        try:
+            task.title = new_title
+        except ValueError as e:
+            print(e)
+        
+        alter_task(task)
+        print("Task updated Successfully\n")
+        logger.info(f"Task updated Successfully: ID = {task.id}")
 
     else:
         print("Task not found.")
@@ -96,9 +98,9 @@ def delete_task():
     task = get_task_by_id(task_id)
 
     if task:
-        delete_task_record(task_id)
+        delete_task_record(task)
         print("\nTask Deleted successfully.")
-        logger.info(f"Task deleted at ID = {task_id}")
+        logger.info(f"Task deleted at ID = {task.id}")
     else:
         print("\nNo task found.\n")
         logger.warning("No task found.")
