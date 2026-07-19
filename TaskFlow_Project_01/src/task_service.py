@@ -48,16 +48,16 @@ def update_task():
         return None
 
     task = get_task_by_id(task_id)
-    
+
     if task:
         new_title = input("Enter the Title of the task.\n>").strip()
         task.title = new_title
-        
+
         try:
             task.title = new_title
         except ValueError as e:
             print(e)
-        
+
         alter_task(task)
         print("Task updated Successfully\n")
         logger.info(f"Task updated Successfully: ID = {task.id}")
