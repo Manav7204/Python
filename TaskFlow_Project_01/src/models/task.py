@@ -26,12 +26,9 @@ class Task:
             logger.warning("Task title cannot be empty.")
             raise ValueError("Task title cannot be empty.")
         self._title = value
-    
+
     def toggle_status(self):
-        if self.status.name == "Pending":
-            self.status = Status("Completed")
-        else:
-            self.status = Status("Pending")
+        self.status.toggle()
 
     def __str__(self) -> str:
         return f"{self.id}. {self.title} [{self.status}]"

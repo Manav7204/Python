@@ -52,7 +52,6 @@ def update_task():
         return None
 
     task = get_task_by_id(task_id)
-    
 
     if task:
         edit_menu()
@@ -60,7 +59,7 @@ def update_task():
 
         if choice == 1:
             new_title = input("Enter the Title of the task.\n>").strip()
-            
+
             try:
                 task.title = new_title
             except ValueError as e:
@@ -72,7 +71,7 @@ def update_task():
             logger.info(f"Task updated Successfully: ID = {task.id}")
 
         elif choice == 2:
-            
+
             task.toggle_status()
             alter_task(task)
             print("Status updated Successfully\n")

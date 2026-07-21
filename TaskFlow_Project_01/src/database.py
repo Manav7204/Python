@@ -89,7 +89,7 @@ def alter_task(task):
         """UPDATE tasks
         SET title = ?, status = ?
         WHERE id = ?""",
-        (task.title,task.status.name, task.id),
+        (task.title, task.status.name, task.id),
     )
 
     conn.commit()
