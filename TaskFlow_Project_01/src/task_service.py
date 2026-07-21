@@ -1,15 +1,10 @@
-from src.database import (
-    insert_task,
-    read_tasks,
-    alter_task,
-    delete_task_record,
-    retrieve_tasks,
-    get_task_by_id,
-)
 import logging
 from src.models.task import Task
 from src.models.status import Status
 from src.menu import edit_menu, get_menu_choice
+from src.repository.task_repository import TaskRepository
+
+repository = TaskRepository()
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +15,7 @@ def add_task():
 
     if task_title:
         task = Task(None, task_title, Status("Pending"))
-        task_id = insert_task(task)
+        task_id = repository.insert_task(task)
         logger.info(f"Task added at ID = {task_id}")
     else:
         print("\nTask cannot be empty!\n")
@@ -30,7 +25,7 @@ def add_task():
 
 def view_tasks():
 
-    tasks = read_tasks()
+    tasks = repository.read_tasks()
     if tasks:
         print("\n\n")
         print("-" * 10, "Task List", "-" * 10)
@@ -51,7 +46,7 @@ def update_task():
         logger.warning("Invalid Task ID entered")
         return None
 
-    task = get_task_by_id(task_id)
+    task = repository.get_task_by_id(task_id)
 
     if task:
         edit_menu()
@@ -65,7 +60,7 @@ def update_task():
             except ValueError as e:
                 print(e)
 
-            alter_task(task)
+            repository.alter_task(task)
 
             print("Task updated Successfully\n")
             logger.info(f"Task updated Successfully: ID = {task.id}")
@@ -73,7 +68,7 @@ def update_task():
         elif choice == 2:
 
             task.toggle_status()
-            alter_task(task)
+            repository.alter_task(task)
             print("Status updated Successfully\n")
             logger.info(f"Status updated Successfully: ID = {task.id}")
 
@@ -95,7 +90,7 @@ def search_task():
         print("Keyword cannot be empty !")
         return
 
-    found_tasks = retrieve_tasks(keyword)
+    found_tasks = repository.retrieve_tasks(keyword)
 
     logger.info(f"Search performed: {keyword}")
 
@@ -117,11 +112,11 @@ def delete_task():
         print("\nEnter a valid Integer.\n")
         return None
 
-    task = get_task_by_id(task_id)
+    task = repository.get_task_by_id(task_id)
 
     if task:
 
-        delete_task_record(task)
+        repository.delete_task_record(task)
         print("\nTask Deleted successfully.")
         logger.info(f"Task deleted at ID = {task.id}")
 
