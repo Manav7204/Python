@@ -13,28 +13,29 @@ def add_task():
 
     task_title = input("Enter the Title of the task.\n>").strip()
 
-    if task_title:
-        task = Task(None, task_title, Status("Pending"))
-        task_id = repository.insert_task(task)
-        logger.info(f"Task added at ID = {task_id}")
-    else:
-        print("\nTask cannot be empty!\n")
-        logger.warning("Empty Task title")
-        return None
+    task = Task(None, task_title, Status("Pending"))
+    task_id = repository.insert_task(task)
+    
+    logger.info(f"Task added at ID = {task_id}")
 
 
 def view_tasks():
-
     tasks = repository.read_tasks()
-    if tasks:
-        print("\n\n")
-        print("-" * 10, "Task List", "-" * 10)
-        for task in tasks:
-            print(task)
-        print("\n\n")
-        logger.info("Viewed Tasks")
-    else:
-        print("\nNo Tasks Available.")
+
+    if not tasks:
+        print("\nNo tasks available.\n")
+        return
+
+    print("\n" + "=" * 40)
+    print("             TASK LIST")
+    print("=" * 40)
+
+    for task in tasks:
+        print(f"• {task}")
+
+    print("=" * 40 + "\n")
+
+    logger.info("Viewed tasks.")
 
 
 def update_task():
@@ -44,43 +45,41 @@ def update_task():
     except ValueError:
         print("\nEnter a valid Integer.\n")
         logger.warning("Invalid Task ID entered")
-        return None
+        return
 
     task = repository.get_task_by_id(task_id)
 
-    if task:
-        edit_menu()
-        choice = get_menu_choice()
+    if not task:
+        print("Task not found.")
+        return
 
-        if choice == 1:
-            new_title = input("Enter the Title of the task.\n>").strip()
+    edit_menu()
+    choice = get_menu_choice()
 
-            try:
-                task.title = new_title
-            except ValueError as e:
-                print(e)
+    if choice == 1:
+        new_title = input("Enter the Title of the task.\n>").strip()
+    
+        task.title = new_title
 
-            repository.alter_task(task)
+        repository.alter_task(task)
+        print("Task updated Successfully\n")
+        
+        logger.info(f"Task updated Successfully: ID = {task.id}")
 
-            print("Task updated Successfully\n")
-            logger.info(f"Task updated Successfully: ID = {task.id}")
+    elif choice == 2:
 
-        elif choice == 2:
+        task.toggle_status()
+        repository.alter_task(task)
+        
+        print("Status updated Successfully\n")
+        logger.info(f"Status updated Successfully: ID = {task.id}")
 
-            task.toggle_status()
-            repository.alter_task(task)
-            print("Status updated Successfully\n")
-            logger.info(f"Status updated Successfully: ID = {task.id}")
-
-        elif choice == 3:
-            return
-
-        else:
-            print("Invalid Choice entered.")
+    elif choice == 3:
+        return
 
     else:
-        print("Task not found.")
-        return None
+        print("Invalid Choice entered.")
+
 
 
 def search_task():
@@ -105,23 +104,19 @@ def search_task():
 
 
 def delete_task():
-
     try:
         task_id = int(input("Enter the task id to Delete: "))
     except ValueError:
         print("\nEnter a valid Integer.\n")
-        return None
+        return
 
     task = repository.get_task_by_id(task_id)
 
-    if task:
-
-        repository.delete_task_record(task)
-        print("\nTask Deleted successfully.")
-        logger.info(f"Task deleted at ID = {task.id}")
-
-    else:
-
+    if not task:
         print("\nNo task found.\n")
         logger.warning("No task found.")
-        return None
+        return
+
+    repository.delete_task_record(task)
+    print("\nTask Deleted successfully.")
+    logger.info(f"Task deleted at ID = {task.id}")

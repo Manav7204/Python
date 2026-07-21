@@ -1,4 +1,5 @@
 from src.models.status import Status
+from src.exceptions import EmptyTaskTitleError
 import logging
 
 logger = logging.getLogger(__name__)
@@ -24,7 +25,7 @@ class Task:
     def title(self, value: str):
         if not value.strip():
             logger.warning("Task title cannot be empty.")
-            raise ValueError("Task title cannot be empty.")
+            raise EmptyTaskTitleError("Task title cannot be empty.")
         self._title = value
 
     def toggle_status(self):
