@@ -1,10 +1,9 @@
 import sqlite3
 from src.exceptions import DatabaseError
+from config import DATABASE_NAME
 import logging
 
 logger = logging.getLogger(__name__)
-
-DATABASE_NAME = "data/task.db"
 
 
 def create_connection():
