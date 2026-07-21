@@ -8,6 +8,8 @@ from src.database import (
 )
 import logging
 from src.models.task import Task
+from src.models.status import Status
+from src.menu import edit_menu, get_menu_choice
 
 logger = logging.getLogger(__name__)
 
@@ -17,7 +19,7 @@ def add_task():
     task_title = input("Enter the Title of the task.\n>").strip()
 
     if task_title:
-        task = Task(None, task_title)
+        task = Task(None, task_title, Status("Pending"))
         task_id = insert_task(task)
         logger.info(f"Task added at ID = {task_id}")
     else:
@@ -27,6 +29,7 @@ def add_task():
 
 
 def view_tasks():
+
     tasks = read_tasks()
     if tasks:
         print("\n\n")
@@ -40,6 +43,7 @@ def view_tasks():
 
 
 def update_task():
+
     try:
         task_id = int(input("Enter the task id to update: "))
     except ValueError:
@@ -48,19 +52,37 @@ def update_task():
         return None
 
     task = get_task_by_id(task_id)
+    
 
     if task:
-        new_title = input("Enter the Title of the task.\n>").strip()
-        task.title = new_title
+        edit_menu()
+        choice = get_menu_choice()
 
-        try:
-            task.title = new_title
-        except ValueError as e:
-            print(e)
+        if choice == 1:
+            new_title = input("Enter the Title of the task.\n>").strip()
+            
+            try:
+                task.title = new_title
+            except ValueError as e:
+                print(e)
 
-        alter_task(task)
-        print("Task updated Successfully\n")
-        logger.info(f"Task updated Successfully: ID = {task.id}")
+            alter_task(task)
+
+            print("Task updated Successfully\n")
+            logger.info(f"Task updated Successfully: ID = {task.id}")
+
+        elif choice == 2:
+            
+            task.toggle_status()
+            alter_task(task)
+            print("Status updated Successfully\n")
+            logger.info(f"Status updated Successfully: ID = {task.id}")
+
+        elif choice == 3:
+            return
+
+        else:
+            print("Invalid Choice entered.")
 
     else:
         print("Task not found.")
@@ -89,6 +111,7 @@ def search_task():
 
 
 def delete_task():
+
     try:
         task_id = int(input("Enter the task id to Delete: "))
     except ValueError:
@@ -98,10 +121,13 @@ def delete_task():
     task = get_task_by_id(task_id)
 
     if task:
+
         delete_task_record(task)
         print("\nTask Deleted successfully.")
         logger.info(f"Task deleted at ID = {task.id}")
+
     else:
+
         print("\nNo task found.\n")
         logger.warning("No task found.")
         return None
