@@ -29,7 +29,8 @@ while True:
 
     if choice == 1:
         try:
-            add_task()
+            task_title = input("Enter the Title of the task.\n>").strip()
+            add_task(task_title)
         except ValidationError as e:
             print(e)
             logger.error(f"{type(e).__name__}: {e}")

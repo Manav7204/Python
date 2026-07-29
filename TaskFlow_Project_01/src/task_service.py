@@ -9,9 +9,7 @@ repository = TaskRepository()
 logger = logging.getLogger(__name__)
 
 
-def add_task():
-
-    task_title = input("Enter the Title of the task.\n>").strip()
+def add_task(task_title):
 
     task = Task(None, task_title, Status("Pending"))
     task_id = repository.insert_task(task)

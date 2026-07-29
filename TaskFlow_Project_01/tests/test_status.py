@@ -1,6 +1,5 @@
 import pytest
 from src.models.status import Status
-from src.task_service import add_task
 
 def test_create_status():
     status = Status("Pending")
